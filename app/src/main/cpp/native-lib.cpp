@@ -1,11 +1,31 @@
 #include <jni.h>
 #include <string>
+#include <iostream>
+#include "include/wisardpkg.hpp"
+namespace wp = wisardpkg;
+using namespace std;
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_reciclex_MainActivity_stringFromJNI(
         JNIEnv* env,
         jobject /* this */) {
-    std::string hello = "Hello from C++";
+
+    string baseOut = wp::Base64::encode("Hello base64");
+    wp::Wisard w(3, {
+            {"bleachingActivated", true}
+    });
+    vector<vector<int>> X(2);
+    vector<string> y(2);
+
+    X[0] = {1,1,1,0,0,0};
+    X[1] = {1,1,1,0,0,1};
+    y[0] = 'a';
+    y[1] = 'b';
+    w.train(X,y);
+
+    auto out = w.classify(X);
+
+    std::string hello = "Hello from C++ " + out[1];
     return env->NewStringUTF(hello.c_str());
 }
 
