@@ -102,7 +102,7 @@ class MainActivity2 : AppCompatActivity() {
 
                     override fun
                             onImageSaved(output: ImageCapture.OutputFileResults){
-                        val msg = "Photo capture succeeded: ${output.savedUri}"
+                        val msg = kTstringFromJNI() + " Photo capture succeeded: ${output.savedUri}"
 
                         Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                         Log.d(TAG, msg)
@@ -249,6 +249,7 @@ class MainActivity2 : AppCompatActivity() {
         super.onDestroy()
         cameraExecutor.shutdown()
     }
+    external fun kTstringFromJNI(): String
 
     companion object {
         private const val TAG = "CameraXApp"
@@ -263,6 +264,9 @@ class MainActivity2 : AppCompatActivity() {
                         add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     }
                 }.toTypedArray()
+        init {
+            System.loadLibrary("reciclex")
+        }
     }
 
     private class LuminosityAnalyzer(private val listener: LumaListener) : ImageAnalysis.Analyzer {

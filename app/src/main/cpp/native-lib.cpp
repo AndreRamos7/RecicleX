@@ -47,3 +47,9 @@ Java_com_reciclex_MainActivity_process(
     const std::string msg = c_msg + java_msg;
     return env->NewStringUTF((msg.c_str()));
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_reciclex_MainActivity2_kTstringFromJNI(JNIEnv *env, jobject thiz) {
+    std::string hello = "Hello from C++ kt";
+    return env->NewStringUTF(hello.c_str());
+}
