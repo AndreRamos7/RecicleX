@@ -2,10 +2,15 @@ package com.reciclex;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
 import android.widget.TextView;
 
 import com.reciclex.databinding.ActivityMainBinding;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,7 +33,25 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(stringFromJNI());
 
         binding.sampleText2.setText(process());
+        binding.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                novaActivity();
+            }
+        });
     }
+
+    private void novaActivity() {
+        Intent intent = new Intent(this, MainActivity2.class);
+
+        startActivity(intent);
+    }
+
+    private File createPhotoFile() {
+        //String name
+        return null;
+    }
+
     public native String process();
 
     public String processInJava(){
