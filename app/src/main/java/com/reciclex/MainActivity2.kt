@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import com.reciclex.databinding.ActivityMain2Binding
 
-typealias LumaListener = (luma: Double) -> Unit
+typealias LumaListener = (luma: IntArray) -> Unit
 
 class MainActivity2 : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMain2Binding
@@ -55,6 +55,7 @@ class MainActivity2 : AppCompatActivity() {
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
+            Toast.makeText(baseContext, treinarWisard(), Toast.LENGTH_SHORT).show()
         } else {
             ActivityCompat.requestPermissions(
                     this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
@@ -217,7 +218,9 @@ class MainActivity2 : AppCompatActivity() {
                     .build()
                     .also {
                         it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                            Log.d(TAG, "Average luminosity: $luma")
+                            val texto: String = classificarImagemWisard(luma!!)
+
+                            Log.d(TAG, "Average luminosity: $texto")
                         })
                     }
 
@@ -239,7 +242,8 @@ class MainActivity2 : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
 
     }
-
+    external fun classificarImagemWisard(jOA: IntArray): String
+    external fun treinarWisard(): String
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
                 baseContext, it) == PackageManager.PERMISSION_GRANTED
@@ -283,8 +287,8 @@ class MainActivity2 : AppCompatActivity() {
 
             val data = buffer.toByteArray()
             val pixels = data.map { it.toInt() and 0xFF }
-            val luma = pixels.average()
-            //Log.i(TAG, pixels.toString())
+            val luma = pixels.toIntArray()//.average()
+            //Log.i(TAG, "" + luma.toString())
             listener(luma)
 
             image.close()
