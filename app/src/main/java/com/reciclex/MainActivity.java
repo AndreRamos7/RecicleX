@@ -36,13 +36,27 @@ public class MainActivity extends AppCompatActivity {
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                novaActivity();
+                cam_tela_cheia();
             }
         });
+
+        binding.buttonVr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cam_tela_dupla();
+            }
+        });
+
     }
 
-    private void novaActivity() {
+    private void cam_tela_cheia() {
         Intent intent = new Intent(this, MainActivity2.class);
+
+        startActivity(intent);
+    }
+
+    private void cam_tela_dupla() {
+        Intent intent = new Intent(this, VRActivity.class);
 
         startActivity(intent);
     }

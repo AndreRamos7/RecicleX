@@ -3,6 +3,7 @@ package com.reciclex
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.graphics.*
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -34,6 +35,7 @@ import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.reciclex.databinding.ActivityMain2Binding
+import java.io.ByteArrayOutputStream
 
 typealias LumaListener = (luma: IntArray) -> Unit
 
@@ -283,6 +285,13 @@ class MainActivity2 : AppCompatActivity() {
         }
 
         override fun analyze(image: ImageProxy) {
+
+            val bitmap = image.toBitmap() // Convertendo a imagem para um Bitmap
+            // Realize as manipulações de imagem aqui usando o objeto Bitmap
+
+            //bitmap.
+
+
             val buffer = image.planes[0].buffer
 
             val data = buffer.toByteArray()
@@ -293,5 +302,32 @@ class MainActivity2 : AppCompatActivity() {
 
             image.close()
         }
+        fun ImageProxy.toBitmap(): Bitmap {
+            val yBuffer = planes[0].buffer // Obtendo o buffer do componente YUV (Y)
+            val uBuffer = planes[1].buffer // Obtendo o buffer do componente YUV (U)
+            val vBuffer = planes[2].buffer // Obtendo o buffer do componente YUV (V)
+
+            val ySize = yBuffer.remaining() // Obtendo o tamanho do buffer do componente YUV (Y)
+            val uSize = uBuffer.remaining() // Obtendo o tamanho do buffer do componente YUV (U)
+            val vSize = vBuffer.remaining() // Obtendo o tamanho do buffer do componente YUV (V)
+
+            val nv21 = ByteArray(ySize + uSize + vSize) // Criando um buffer para o formato NV21
+
+            // Copiando o buffer do componente YUV (Y) para o buffer NV21
+            yBuffer.get(nv21, 0, ySize)
+            // Copiando o buffer do componente YUV (V) para o buffer NV21
+            vBuffer.get(nv21, ySize, vSize)
+            // Copiando o buffer do componente YUV (U) para o buffer NV21
+            uBuffer.get(nv21, ySize + vSize, uSize)
+
+            val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
+            val out = ByteArrayOutputStream()
+            yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 50, out)
+            val imageBytes = out.toByteArray()
+
+            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        }
     }
+
+
 }

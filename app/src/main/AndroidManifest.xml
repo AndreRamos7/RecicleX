@@ -20,6 +20,13 @@
         android:theme="@style/Theme.RecicleX"
         tools:targetApi="31">
         <activity
+            android:name=".VRActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_vractivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.RecicleX.Fullscreen" />
+        <activity
             android:name=".MainActivity2"
             android:exported="false"
             android:label="@string/title_activity_main2"
