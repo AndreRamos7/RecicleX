@@ -254,7 +254,7 @@ class VRActivity : AppCompatActivity() {
             val bitmap = image.toBitmap() // Convertendo a imagem para um Bitmap
             // Realize as manipulações de imagem aqui usando o objeto Bitmap
 
-            //bitmap.
+
 
 
             val buffer = image.planes[0].buffer
